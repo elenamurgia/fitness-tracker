@@ -2,6 +2,13 @@ CREATE DATABASE Fitness_app;
 
 USE Fitness_app;
 
+-- CREATE TABLE Users (
+-- 	user_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+--     username VARCHAR(50),
+--     user_password VARCHAR(255),
+--     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP()
+-- );
+
 CREATE TABLE Exercises (     --data will be taken from the Ninja API and stored in this table
     exercise_id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -9,7 +16,7 @@ CREATE TABLE Exercises (     --data will be taken from the Ninja API and stored 
     muscle VARCHAR(50),           
     difficulty VARCHAR(20),       
     equipment VARCHAR(100),       
-    instructions TEXT,            
+    instructions TEXT            
 );
 
 CREATE TABLE Workout_Log (
