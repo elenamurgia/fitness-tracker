@@ -34,7 +34,7 @@ CREATE TABLE Exercise_Sets (
     set_number INTEGER NOT NULL,       -- The order of the set (e.g. 1, 2, 3)
     reps INTEGER,
     weight DECIMAL(5,2),    
-    distance_km DECIMAL(5,2)
+    distance_km DECIMAL(5,2),
     duration_seconds INTEGER,          -- For timed sets
     rest_seconds INTEGER,              -- rest taken before next set
 
