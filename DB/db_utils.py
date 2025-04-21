@@ -52,7 +52,7 @@ class ExerciseDB:
 # -- Elena's code
 def insert_exercise(cursor, exercise):
     query = """
-        INSERT INTO exercises (name, type, muscle, difficulty, equipment, instructions)
+        INSERT INTO Exercises (name, type, muscle, difficulty, equipment, instructions)
         VALUES (%s, %s, %s, %s, %s, %s)
     """
     cursor.execute(query, (

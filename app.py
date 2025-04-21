@@ -1,5 +1,5 @@
 from DB.db_utils import get_connection
-from CLI.cliaent_side import main_menu
+from CLI.client_side import main_menu
 
 def run():
     conn = get_connection()

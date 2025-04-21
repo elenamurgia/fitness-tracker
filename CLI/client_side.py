@@ -1,10 +1,10 @@
-from AUTH.auth import login, register
+from AUTH.auth import UserAuth
 from DB.db_utils import get_connection
 import requests
 import random
 
 def main_menu(cursor, conn):
-    user_id = None
+    auth = UserAuth(cursor)
 
     while True:
         print("\nFITNESS APP")
@@ -15,11 +15,11 @@ def main_menu(cursor, conn):
         choice = input("Choose an option: ")
 
         if choice == "1":
-            user_id = login(cursor)
+            user_id = auth.login()
             if user_id:
                 logged_in_menu(cursor, conn, user_id)
         elif choice == "2":
-            register(cursor, conn)
+            auth.register()
         elif choice == "3":
             print("Buh-byeeee!")
             break
