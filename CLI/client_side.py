@@ -4,7 +4,7 @@ import requests
 import random
 
 def main_menu(cursor, conn):
-    auth = UserAuth(cursor)
+    auth = UserAuth(cursor, conn)
 
     while True:
         print("\nFITNESS APP")

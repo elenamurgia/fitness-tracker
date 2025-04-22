@@ -12,4 +12,7 @@ def run():
     conn.close()
 
 if __name__ == "__main__":
-    run()
+    conn = get_connection()
+    cursor = conn.cursor()
+    main_menu(cursor, conn)
+

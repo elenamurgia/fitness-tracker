@@ -5,7 +5,7 @@ USE Fitness_app;
 
  CREATE TABLE Users (
  	user_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-     username VARCHAR(50),
+     username VARCHAR(50) UNIQUE,
      user_password VARCHAR(255),
      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP()
  );
