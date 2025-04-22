@@ -44,7 +44,7 @@ class UserAuth:
             )
             self.conn.commit()
             print("Registration successful. You can now log in.")
-            input("Press Enter to return to the main menu...")
+            input("Press Enter to return to the main menu.")
         except Exception as e:
             print(f"Registration failed: {e}")
             return None
