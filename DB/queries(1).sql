@@ -47,3 +47,12 @@ CREATE TABLE Exercise_Sets (
 
     FOREIGN KEY (Workout_log_id) REFERENCES Workout_Log(Workout_log_id)
 );
+
+INSERT INTO Exercises
+VALUES
+('102', 'Incline Hammer Curls', 'strength', 'biceps', 'beginner', 'dumbbell', 'instructions'),
+('103', 'Barbell Squat', 'strength', 'quadriceps', 'intermediate', 'barbell', 'Stand with feet shoulder-width apart, barbell resting on shoulders, squat down and back up.'),
+('104', 'Push-Up', 'strength', 'chest', 'beginner', 'bodyweight', 'Start in plank position, lower chest to the ground, then push back up.'),
+('105', 'Seated Cable Row', 'strength', 'back', 'intermediate', 'cable', 'Sit on the bench, grasp the handle, and pull toward your torso.'),
+('106', 'Lateral Raise', 'strength', 'shoulders', 'beginner', 'dumbbell', 'With arms at sides, raise dumbbells laterally to shoulder height.'),
+('107', 'Leg Press', 'strength', 'glutes', 'beginner', 'machine', 'Sit in the leg press machine and push the platform with your feet.');
