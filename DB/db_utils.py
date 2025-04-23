@@ -1,158 +1,90 @@
 
+import mysql.connector
+from config import USER, PASSWORD,HOST,DATABASE
+
 class DbConnectionError(Exception):
     pass
-import mysql.connector
-DATABASE = "Fitness_app"
 
 def _connect_to_db():
     connection = mysql.connector.connect(
-        host='localhost',
-        user='your_user',
-        password='your_password',
-        database= DATABASE
+        host=HOST,
+        user=USER,
+        auth_plugin='mysql_native_password',
+        password=PASSWORD,
+        database=DATABASE
     )
     return connection
-
-
-def insert_exercise( name, type_, muscle, difficulty, equipment, instructions):
-    db_connection = None
-    try:
-        db_connection = _connect_to_db()
-        cur = db_connection.cursor()
-        print('Connected to DB:%s' % DATABASE)
-
-        insert_query = """
-                        INSERT INTO exercises (name, type, muscle, difficulty, equipment, instructions)
-                        VALUES (%s, %s, %s, %s, %s, %s)
-                    """
-        cur.execute(insert_query, (name, type_, muscle, difficulty, equipment, instructions))
-        db_connection.commit()
-
-        cur.close()
-        return
-
-    except Exception:
-        raise DbConnectionError("Failed to add data to DB")
-
-    finally:
-        if db_connection:
-            db_connection.close()
-            print("DB connection is closed")
-
-def log_exercise_set(user_id, log_date, exercise_id, sets, reps, weight):
-    db_connection = None
-    try:
-        db_connection = _connect_to_db()
-        cursor = db_connection.cursor()
-        print('Connected to DB: %s' % DATABASE)
-
-        insert_query = """
-            INSERT INTO workout_log (user_id, workout_date, exercise_id, sets, reps, weight)
-            VALUES (%s, %s, %s, %s, %s, %s)
-        """
-        cursor.execute(insert_query, (user_id, log_date, exercise_id, sets, reps, weight))
-        db_connection.commit()
-
-        cursor.close()
-        return {
-            "success": True,
-            "message": "Workout logged successfully.",
-            "workout_id": cursor.lastrowid
-        }
-
-    except Exception as e:
-        print(f"Error logging workout: {e}")
-        return {
-            "success": False,
-            "message": "Failed to log workout.",
-            "error": str(e)
-        }
-
-    finally:
-        if db_connection and db_connection.is_connected():
-            db_connection.close()
-            print("DB connection is closed.")
-
-
-
-
-def get_workout(user_id, exercise_id, log_date, start_time, end_time, duration_minutes, notes):
-    db_connection = None
+def get_all_records(): # retrieve all records from the 'workout logs'
+    fitness_api = 'tests'
     try:
         db_connection = _connect_to_db()
         cur = db_connection.cursor()
         print("Connected to DB: %s" % DATABASE)
 
-        get_workout_query = """
-            INSERT INTO workout_log (user_id, exercise_id, log_date, start_time, end_time, duration_minutes, notes)
-            VALUES (%s, %s, %s, %s, %s, %s, %s)
-        """
-        cur.execute(get_workout_query, (user_id, exercise_id, log_date, start_time, end_time, duration_minutes, notes))
-        db_connection.commit()
-        print("Workout logged successfully.")
+        query = """SELECT * FROM Exercises """
+        cur.execute(query)
+        result = cur.fetchall()  # this is a list with db records where each record is a tuple
 
+        cur.close()
+
+        return result
 
     except Exception:
-        raise DbConnectionError("Failed to add data to DB")
+        raise DbConnectionError("Failed to read data from DB")
 
 
-    finally:
-        if db_connection:
-            db_connection.close()
-            print("DB connection is closed")
 
-def fetch_workouts_with_params(user_id, date_filter_sql, date_values):
-    db_connection = None
-    try:
-        db_connection = _connect_to_db()
-        print('Connected to DB: %s' % DATABASE)
+class WorkoutDiaryDB:
+    def __init__(self):
+        self.conn = _connect_to_db()
+        self.cursor = self.conn.cursor(dictionary=True)
 
-        cursor = db_connection.cursor(dictionary=True)
-        query = f"""
-            SELECT * FROM workout_log
-            WHERE user_id = %s AND log_date {date_filter_sql}
-            ORDER BY log_date DESC
+    def insert_workout_log(self, user_id, exercise_id, start_time, end_time, duration_minutes, notes):
+        query = """
+            INSERT INTO Workout_Log (user_id, exercise_id, start_time, end_time, duration_minutes, notes)
+            VALUES (%s, %s, %s, %s, %s, %s)
         """
-        cursor.execute(query, (user_id, *date_values))
-        results = cursor.fetchall()
-        cursor.close()
-        return results
+        self.cursor.execute(query, (user_id, exercise_id, start_time, end_time, duration_minutes, notes))
+        self.conn.commit()
+        return self.cursor.lastrowid  # Return the new workout_log_id
 
-    except mysql.connector.Error as err:
-        print(f"Error fetching workouts: {err}")
-        return []
+    def insert_exercise_set(self, workout_log_id, set_number, reps, weight, distance_km, duration_seconds, rest_seconds):
+        query = """
+            INSERT INTO Exercise_Sets (
+                workout_log_id, set_number, reps, weight, distance_km, duration_seconds, rest_seconds
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s)
+        """
+        self.cursor.execute(query, (
+            workout_log_id, set_number, reps, weight, distance_km, duration_seconds, rest_seconds
+        ))
+        self.conn.commit()
 
-    finally:
-        if db_connection and db_connection.is_connected():
-            db_connection.close()
+    def get_workout_logs(self, user_id, start_date, end_date):
+        query = """
+            SELECT wl.workout_log_id, wl.log_date, wl.duration_minutes, wl.notes,
+                   e.name AS exercise_name, e.muscle, e.type
+            FROM Workout_Log wl
+            JOIN Exercises e ON wl.exercise_id = e.exercise_id
+            WHERE wl.user_id = %s AND wl.log_date BETWEEN %s AND %s
+            ORDER BY wl.log_date DESC
+        """
+        self.cursor.execute(query, (user_id, start_date, end_date))
+        return self.cursor.fetchall()
 
+    def get_sets_for_workout(self, workout_log_id):
+        query = """
+            SELECT set_number, reps, weight, distance_km, duration_seconds, rest_seconds
+            FROM Exercise_Sets
+            WHERE workout_log_id = %s
+            ORDER BY set_number
+        """
+        self.cursor.execute(query, (workout_log_id,))
+        return self.cursor.fetchall()
 
-from datetime import datetime, timedelta
+    def close(self):
+        self.cursor.close()
+        self.conn.close()
 
-def custom_range(user_id, start_date, end_date):
-    """
-    Fetch workouts for a user between any two dates (inclusive).
-    Dates must be in 'YYYY-MM-DD' format.
-    """
-    date_filter = "BETWEEN %s AND %s"
-    return fetch_workouts_with_params(user_id, date_filter, (start_date, end_date))
-
-#def last_7_days(user_id):
-#    return fetch_workouts_with_params(user_id, ">= CURDATE() - INTERVAL 7 DAY") # gets all workout from the start of the week to today
-
-
-#def this_week(user_id):
-#    return fetch_workouts_with_params(user_id, ">= DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY)")
-
-#def previous_week(user_id):
-#    return fetch_workouts_with_params(user_id, "BETWEEN DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) + 7 DAY) AND DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) + 1 DAY)")
-
-#def this_month(user_id):
-#    return fetch_workouts_with_params(user_id, ">= DATE_FORMAT(CURDATE(), '%Y-%m-01')")
-
-#def last_month(user_id):
-#    return fetch_workouts_with_params(user_id, "BETWEEN DATE_FORMAT(CURDATE() - INTERVAL 1 MONTH, '%Y-%m-01') AND LAST_DAY(CURDATE() - INTERVAL 1 MONTH)")
-
-#def last_6_months(user_id):
-#    return fetch_workouts_with_params(user_id, ">= CURDATE() - INTERVAL 6 MONTH")
-
+if __name__ == "__main__":
+    print("TESTING DB CONNECTION")
+    print (get_all_records())
