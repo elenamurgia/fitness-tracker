@@ -1,9 +1,41 @@
 import requests
 import json
 from datetime import datetime
-
+from DB.db_utils import WorkoutDiaryDB
+db = WorkoutDiaryDB()
 # Base URL for your local Flask API
 BASE_URL = "http://127.0.0.1:5000/api"
+
+
+def view_logs():
+    print("=== View Workout Logs ===")
+
+    # Prompt user to choose a user_id and time range
+    user_id = int(input("User ID: "))
+    range_name = input("Range (e.g., last_7_days, this_month): ")
+
+    params = {
+        "user_id": user_id,
+        "range": range_name
+    }
+
+    # Send GET request to fetch logs
+    try:
+        response = requests.get(f"{BASE_URL}/workout-diary", params=params)
+        response.raise_for_status()
+        data = response.json()
+
+        print("Retrieved workout logs:")
+        for log in data.get("logs", []):
+            print(f"\n Date: {log['log_date']} |  Exercise: {log['exercise_name']} ({log['muscle']})")
+            print(f"⏱️ Duration: {log['duration_minutes']} mins | Notes: {log['notes']}")
+            print("Sets:")
+            for s in log.get("sets", []):
+                print(f"  - Set {s['set_number']}: {s['reps']} reps x {s['weight']}kg (Rest: {s['rest_seconds']}s)")
+
+    except requests.RequestException as e:
+        print(" Error fetching logs:", e)
+
 
 class WorkoutClient:
     def __init__(self):
@@ -68,34 +100,6 @@ class WorkoutClient:
             except ValueError:
                 print(" Failed to log workout. Response:", response.text)
 
-    def view_logs(self):
-        print("=== View Workout Logs ===")
-
-        # Prompt user to choose a user_id and time range
-        user_id = int(input("User ID: "))
-        range_name = input("Range (e.g., last_7_days, this_month): ")
-
-        params = {
-            "user_id": user_id,
-            "range": range_name
-        }
-
-        # Send GET request to fetch logs
-        try:
-            response = requests.get(f"{BASE_URL}/workout-diary", params=params)
-            response.raise_for_status()
-            data = response.json()
-
-            print("📋 Retrieved workout logs:")
-            for log in data.get("logs", []):
-                print(f"\n📅 Date: {log['log_date']} | 🏋️ Exercise: {log['exercise_name']} ({log['muscle']})")
-                print(f"⏱️ Duration: {log['duration_minutes']} mins | 📝 Notes: {log['notes']}")
-                print("Sets:")
-                for s in log.get("sets", []):
-                    print(f"  - Set {s['set_number']}: {s['reps']} reps x {s['weight']}kg (Rest: {s['rest_seconds']}s)")
-
-        except requests.RequestException as e:
-            print(" Error fetching logs:", e)
 
 def run():
     client = WorkoutClient()
@@ -108,7 +112,7 @@ def run():
         if choice == "1":
             client.log_workout()
         elif choice == "2":
-            client.view_logs()
+            view_logs()
         elif choice == "0":
             break
         else:

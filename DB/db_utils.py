@@ -1,4 +1,8 @@
-
+#The WorkoutDiaryDB class handles all interactions with the MySQL database for logging and retrieving workout information.
+# It includes methods to insert workout logs (insert_workout_log), save sets of exercises (insert_exercise_set),
+# retrieve logs for a user within a date range (get_workout_logs), and fetch individual sets for a specific workout (get_sets_for_workout).
+# Each method uses SQL queries to perform actions on the appropriate tables (Workout_Log, Exercise_Sets, Exercises).
+# The class manages its own database connection and cursor, and the connection is closed using the close() method when finished. This structure keeps all database-related operations modular and reusable within your fitness app.
 import mysql.connector
 from config import USER, PASSWORD,HOST,DATABASE
 
@@ -14,6 +18,7 @@ def _connect_to_db():
         database=DATABASE
     )
     return connection
+
 def get_all_records(): # retrieve all records from the 'workout logs'
     fitness_api = 'tests'
     try:
