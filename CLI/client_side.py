@@ -28,7 +28,7 @@ def view_logs():
         print("Retrieved workout logs:")
         for log in data.get("logs", []):
             print(f"\n Date: {log['log_date']} |  Exercise: {log['exercise_name']} ({log['muscle']})")
-            print(f"⏱️ Duration: {log['duration_minutes']} mins | Notes: {log['notes']}")
+            print(f"Duration: {log['duration_minutes']} mins | Notes: {log['notes']}")
             print("Sets:")
             for s in log.get("sets", []):
                 print(f"  - Set {s['set_number']}: {s['reps']} reps x {s['weight']}kg (Rest: {s['rest_seconds']}s)")
