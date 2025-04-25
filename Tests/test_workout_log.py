@@ -1,5 +1,3 @@
 import pytest
-from DB.workout_log import WorkoutLog
-
-
+from API.fitness_api import app
 
