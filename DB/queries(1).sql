@@ -48,3 +48,11 @@ CREATE TABLE Exercise_Sets (
 
     FOREIGN KEY (Workout_log_id) REFERENCES Workout_Log(Workout_log_id)
 );
+
+INSERT INTO Exercises (name, type, muscle, difficulty, equipment, instructions)
+VALUES
+('Push-Up', 'strength', 'chest', 'beginner', 'none', 'Start in a plank position. Lower your body and push back up.'),
+('Squat', 'strength', 'legs', 'beginner', 'none', 'Stand with feet shoulder-width apart. Bend your knees and lower your body.'),
+('Bicep Curl', 'strength', 'arms', 'intermediate', 'dumbbells', 'Curl the dumbbells up while keeping your elbows close to your sides.'),
+('Plank', 'isometric', 'core', 'intermediate', 'none', 'Hold your body in a straight line, supported on your forearms and toes.'),
+('Deadlift', 'strength', 'back', 'advanced', 'barbell', 'Lift the barbell from the floor while keeping your back straight.');
