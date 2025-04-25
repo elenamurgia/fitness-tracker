@@ -1,7 +1,6 @@
 from config import db_config
 import mysql.connector
 
-
 #This function creates a connection using the config file (please refer to config file for more instructions)
 def get_connection():
     return mysql.connector.connect(
@@ -48,19 +47,3 @@ class ExerciseDB:
             if db_connection:
                 db_connection.close()
                 print("DB connection is closed")#Debug message
-
-# -- Elena's code
-def insert_exercise(cursor, exercise):
-    query = """
-        INSERT INTO Exercises (name, type, muscle, difficulty, equipment, instructions)
-        VALUES (%s, %s, %s, %s, %s, %s)
-    """
-    cursor.execute(query, (
-        exercise["name"],
-        exercise["type"],
-        exercise["muscle"],
-        exercise["difficulty"],
-        exercise["equipment"],
-        exercise["instructions"]
-    ))
-
