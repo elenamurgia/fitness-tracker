@@ -1,13 +1,17 @@
 from AUTH.auth import UserAuth
+from DB.workout_log import WorkoutLog
 from DB.db_utils import get_connection
 import requests
 import random
+
+from DB.workout_log import WorkoutLog
+
 
 def main_menu(cursor, conn):
     auth = UserAuth(cursor, conn)
 
     while True:
-        print("\nFITNESS APP")
+        print("\nWelcome to Fitness App")
         print("Select a number to choose an option:")
         print("1. Login")
         print("2. Register")
@@ -27,23 +31,36 @@ def main_menu(cursor, conn):
             print("Invalid input. Try again.")
 
 def logged_in_menu(cursor, conn, user_id):
+    workout_log = WorkoutLog(cursor, conn)
     while True:
         # print("\nLogged in")
         print("\nMAIN MENU")
         print("Select a number to choose an option:")
-        print("1. View All Workouts")
+        print("1. View Your Workout Menu")
         print("2. View by Category (arms, legs, chest, etc.)")
         print("3. Log New Workout")
-        print("4. View Favorites")
+        print("4. View Favourites")
         print("5. Logout")
         choice = input(">> ")
 
         if choice == "1":
-            view_all_workouts(cursor, user_id) # TODO: Will come from class (Al of these are to be modified! just put them here so it's not empty)
+            print("1. View all your workouts")
+            print("2. View your progress")
+            print("3. Go back to the Main Menu")
+            print("4. Logout")
+            choice_workout = input(">> ")
+            if choice_workout == "1":
+                workout_log.view_all_workouts(user_id)
+            elif choice_workout == "3":
+                continue
+            elif choice_workout == "4":
+                break
+            else:
+                print("Invalid choice. Try again.")
         elif choice == "2":
-            view_category_workouts(cursor) # TODO: Will come from class
+            view_category_workouts(cursor)
         elif choice == "3":
-            log_workout(cursor, conn, user_id) # TODO: Will come from class
+            workout_log.workout_log(user_id)
         elif choice == "4":
             view_favorites(cursor, user_id) # TODO: Will come from class
         elif choice == "5":
