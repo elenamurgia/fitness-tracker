@@ -5,7 +5,6 @@ def run():
     conn = get_connection()
     cursor = conn.cursor()
 
-    print("Welcome to the Fitness App!")
     main_menu(cursor, conn) # Contains login and register functionality
 
     cursor.close()
