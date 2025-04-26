@@ -6,7 +6,7 @@ class WorkoutLog:
     def workout_log(self, user_id):
         try:
             print("\nAvailable Exercises:")
-            self.cursor.execute("SELECT exercise_id, name, muscle, difficulty FROM Exercises")
+            self.cursor.execute("SELECT exercise_id, name, muscle, difficulty FROM exercises")
             exercises = self.cursor.fetchall()
 
             if not exercises:
@@ -27,7 +27,7 @@ class WorkoutLog:
             notes = input("Any notes or comments that you would like to add? ")
 
             query = '''
-            INSERT INTO Workout_Log (user_id, exercise_id, duration_minutes, notes)
+            INSERT INTO workout_Log (user_id, exercise_id, duration_minutes, notes)
             VALUES (%s, %s, %s, %s)
             '''
             self.cursor.execute(query, (user_id, exercise_id, duration, notes))
@@ -40,9 +40,9 @@ class WorkoutLog:
     def view_all_workouts(self, user_id):
         try:
             query = '''
-            SELECT wl.Workout_log_id, e.name, wl.duration_minutes, wl.notes,wl.log_date
-            FROM Workout_log wl
-            JOIN Exercises e ON wl.exercise_id = e.exercise_id
+            SELECT wl.workout_log_id, e.name, wl.duration_minutes, wl.notes,wl.log_date
+            FROM workout_log wl
+            JOIN exercises e ON wl.exercise_id = e.exercise_id
             WHERE wl.user_id = %s
             ORDER BY wl.log_date DESC
             '''
