@@ -36,34 +36,37 @@ def logged_in_menu(cursor, conn, user_id):
         # print("\nLogged in")
         print("\nMAIN MENU")
         print("Select a number to choose an option:")
-        print("1. View Your Workout Menu")
-        print("2. View by Category (arms, legs, chest, etc.)")
-        print("3. Log New Workout")
-        print("4. View Favourites")
-        print("5. Logout")
+        print("1. View Workout Menu")
+        print("2. Browse by Category (arms, legs, chest, etc.)")
+        print("3. Logout")
         choice = input(">> ")
 
         if choice == "1":
-            print("1. View all your workouts")
-            print("2. View your progress")
-            print("3. Go back to the Main Menu")
-            print("4. Logout")
-            choice_workout = input(">> ")
-            if choice_workout == "1":
-                workout_log.view_all_workouts(user_id)
-            elif choice_workout == "3":
+            print("\nWORKOUT MENU")
+            print("1. View Past Workouts")
+            print("2. Log New Workout")
+            print("3. View Progress")
+            print("4. View Favourites")
+            print("5. Go back to the Main Menu")
+            print("6. Logout")
+            choice_workout_menu = input(">> ")
+            if choice_workout_menu == "1":
+                workout_log.view_all_logged_workouts(user_id)
+            elif choice_workout_menu == "2":
+                workout_log.workout_log(user_id)
+            elif choice_workout_menu == "3":
+                view_progress() # Nora's code to be added
+            elif choice == "4":
+                view_favorites(cursor, user_id)  # Ekta's code to be added
+            elif choice_workout_menu == "5":
                 continue
-            elif choice_workout == "4":
+            elif choice_workout_menu == "6":
                 break
             else:
                 print("Invalid choice. Try again.")
         elif choice == "2":
-            view_category_workouts(cursor)
+            view_category_workouts(cursor) # Paula's code?
         elif choice == "3":
-            workout_log.workout_log(user_id)
-        elif choice == "4":
-            view_favorites(cursor, user_id) # TODO: Will come from class
-        elif choice == "5":
             print("Logged out.")
             break
         else:
