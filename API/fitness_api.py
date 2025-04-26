@@ -73,7 +73,7 @@ def get_user_workouts(username):
 
 # Log a new workout for a user
 @app.route("/<username>/workouts", methods=["POST"])
-def log_user_workout(username):   # ✅ match parameter name
+def log_user_workout(username):
     try:
         cursor = conn.cursor()
 
