@@ -40,16 +40,16 @@ def get_user_workouts(username):
     try:
         cursor = conn.cursor()
 
-        cursor.execute("SELECT user_id FROM Users WHERE username = %s", (username,))
+        cursor.execute("SELECT user_id FROM users WHERE username = %s", (username,))
         result = cursor.fetchone()
         if not result:
-            return jsonify({"error": f"User '{username}' not found"}), 404
+            return jsonify(f"User '{username}' not found"), 404
         user_id = result[0]
 
         cursor.execute("""
-            SELECT wl.Workout_log_id, e.name, wl.duration_minutes, wl.notes, wl.log_date
-            FROM Workout_Log wl
-            JOIN Exercises e ON wl.exercise_id = e.exercise_id
+            SELECT wl.workout_log_id, e.name, wl.duration_minutes, wl.notes, wl.log_date
+            FROM workout_Log wl
+            JOIN exercises e ON wl.exercise_id = e.exercise_id
             WHERE wl.user_id = %s
             ORDER BY wl.log_date DESC
         """, (user_id,))
@@ -77,10 +77,10 @@ def log_user_workout(username):
     try:
         cursor = conn.cursor()
 
-        cursor.execute("SELECT user_id FROM Users WHERE username = %s", (username,))
+        cursor.execute("SELECT user_id FROM users WHERE username = %s", (username,))
         user = cursor.fetchone()
         if not user:
-            return jsonify({"error": f"User '{username}' not found"}), 404
+            return jsonify(f"User '{username}' not found"), 404
         user_id = user[0]
 
         data = request.get_json()
@@ -92,7 +92,7 @@ def log_user_workout(username):
             return jsonify({"error": "exercise_id and duration_minutes are required"}), 400
 
         cursor.execute("""
-            INSERT INTO Workout_Log (user_id, exercise_id, duration_minutes, notes)
+            INSERT INTO workout_log (user_id, exercise_id, duration_minutes, notes)
             VALUES (%s, %s, %s, %s)
         """, (user_id, exercise_id, duration_minutes, notes))
         conn.commit()
