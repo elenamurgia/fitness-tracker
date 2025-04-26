@@ -6,6 +6,7 @@ from DB.db_utils import ExerciseDB, get_connection
 
 app = Flask(__name__)
 exercise_db = ExerciseDB() #creates an instance of ExerciseDB so it can be imported (P)
+
 # Create a connection to the database
 conn = get_connection()
 
@@ -16,7 +17,7 @@ def favicon():
 
 @app.route('/')
 def home():
-    return 'Welcome to the Fitness App'
+    return 'Welcome to the CFG Fitness App'
 
 # Class to fetch a user exercise from the db
 @app.route("/user_exercises", methods=["GET"])
@@ -34,45 +35,6 @@ def get_exercises_muscle_db():
 
 # Elena's code
 # Fetch workouts for a user
-@app.route("/<username>/workouts", methods = ["GET"])
-def get_user_workouts(username):
-    try:
-        cursor = conn.cursor()
-
-        # Get user_id from username
-        cursor.execute("SELECT user_id FROM Users WHERE username = %s", (username,))
-        result = cursor.fetchone()
-        if not result:
-            return jsonify({"error": f"User '{username}' not found"}), 404
-        user_id = result[0]
-
-        # Fetch workouts for the user
-        cursor.execute("""
-            SELECT wl.Workout_log_id, e.name, wl.duration_minutes, wl.notes, wl.log_date
-            FROM Workout_Log wl
-            JOIN Exercises e ON wl.exercise_id = e.exercise_id
-            WHERE wl.user_id = %s
-            ORDER BY wl.log_date DESC        
-        """, (user_id,))
-        workouts = cursor.fetchall()
-
-        result = [
-            {
-                "log_id": row[0],
-                "exercise": row[1],
-                "duration": row[2],
-                "notes": row[3],
-                "timestamp": row[4].isoformat()
-            }
-            for row in workouts
-        ]
-
-        return jsonify(result), 200
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-# Log workout
 @app.route("/<username>/workouts", methods=["GET"])
 def get_user_workouts(username):
     try:
