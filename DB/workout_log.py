@@ -1,3 +1,5 @@
+import datetime
+
 class WorkoutLog:
     def __init__(self, cursor, conn):
         self.cursor = cursor
@@ -23,7 +25,7 @@ class WorkoutLog:
 
             selected_exercise = exercises[int(choice) - 1]
             exercise_id = selected_exercise[0]
-            duration = int(input("Duration (in minutes): "))
+            duration_minutes = int(input("Duration (in minutes): "))
             notes = input("Any notes or comments that you would like to add? ")
 
             # Insert workout log
@@ -31,7 +33,7 @@ class WorkoutLog:
             INSERT INTO workout_Log (user_id, exercise_id, duration_minutes, notes)
             VALUES (%s, %s, %s, %s)
             '''
-            self.cursor.execute(workout_log_query, (user_id, exercise_id, duration, notes))
+            self.cursor.execute(workout_log_query, (user_id, exercise_id, duration_minutes, notes))
             self.conn.commit()
 
             # Get the last inserted workout_log_id
@@ -41,10 +43,9 @@ class WorkoutLog:
             add_sets = input("Do you want to add sets for this workout? (y/n): ").lower()
             if add_sets == 'y' or add_sets == 'yes':
                 print("\nLet's log the exercise sets for this workout.")
-            elif add_sets == 'n' or add_sets == 'no':
-                print("Workout logged without sets")
+                self.add_sets_to_workout(workout_log_id)
             else:
-                print("Invalid choice. Please try again.")
+                print("Workout logged without sets")
         except ValueError:
             print("Error logging workout")
 
@@ -82,7 +83,6 @@ class WorkoutLog:
         print("Exercise sets logged successfully!")
 
 
-
     def view_all_logged_workouts(self, user_id):
         try:
             workout_query = '''
@@ -97,26 +97,8 @@ class WorkoutLog:
 
             if not workouts:
                 print("You haven't logged any workout yet.")
-                return
 
-            print("\n Your workout Log: ")
-            for w in workouts:
-                workout_log_id = w[0]
-                print(f"Log ID: {w[0]}")
-                print(f"Exercise: {w[1]}")
-                print(f"Duration: {w[2]} minutes")
-                print(f"Notes: {w[3]}")
-                print(f"Date: {w[4]}\n")
-
-                # Show the sets linked to this workout
-                self.view_sets_for_workout(workout_log_id)
-
-                # Ask if user wants to save the workout to the file
-                save_choice = input("\nDo you want to save this workout to a file? (y/n): ").lower()
-                if save_choice in ['y', 'yes']:
-                    self.save_workout_to_file(w, workout_log_id)
-                else:
-                    print("Workout has not been saved.")
+            return workouts
 
         except ValueError:
             print("Error retrieving workouts.")
@@ -137,21 +119,22 @@ class WorkoutLog:
             for s in sets:
                 print(f"Set {s[0]}:")
                 print(f"Reps: {s[1] if s[1] is not None else 'N/A'}")
-                print(f"Weight: {set[2] if set[2] is not None else 'N/A'}")
-                print(f"Distance: {set[3] if set[3] is not None else 'N/A'}")
-                print(f"Duration: {set[4] if set[4] is not None else 'N/A'}")
-                print(f"Rest: {set[5] if set[5] is not None else 'N/A'}")
+                print(f"Weight: {s[2] if s[2] is not None else 'N/A'}")
+                print(f"Distance: {s[3] if s[3] is not None else 'N/A'}")
+                print(f"Duration: {s[4] if s[4] is not None else 'N/A'}")
+                print(f"Rest: {s[5] if s[5] is not None else 'N/A'}")
         else:
             print("No sets recorded for this workout.")
 
     def save_workout_to_file(self, workout, workout_log_id):
         filename = f"workout_log_{workout_log_id}.txt"
         with open(filename, "w") as f:
-            f.write(f"Workout Log ID: {w[0]}\n")
-            f.write(f"Exercise: {w[1]}\n")
-            f.write(f"Duration: {w[2]} minutes\n")
-            f.write(f"Notes: {w[3]}\n")
-            f.write(f"Date: {w[4]}\n\n")
+            f.write(f"Workout Log ID: {workout[0]}\n")
+            f.write(f"Exercise: {workout[1]}\n")
+            f.write(f"Duration: {workout[2]} minutes\n")
+            f.write(f"Notes: {workout[3]}\n")
+            formatted_date = workout[4].strftime("%-d %B %Y at %H:%M")
+            f.write(f"Date: {formatted_date}\n\n")
 
             set_query = '''
             SELECT set_number, reps, weight, distance_km, duration_seconds, rest_seconds
@@ -159,7 +142,7 @@ class WorkoutLog:
             WHERE workout_log_id = %s
             ORDER BY set_number ASC
             '''
-            self.cursor.execute(set_query, (workout_log_id))
+            self.cursor.execute(set_query, (workout_log_id,))
             sets = self.cursor.fetchall()
 
             if sets:
@@ -174,3 +157,39 @@ class WorkoutLog:
             else:
                 f.write("No sets recorded for this workout.\n")
         print(f"Workout saved to {filename}!")
+
+    def save_all_workouts_to_file(self, workouts):
+        filename = "all_workouts.txt"
+        with open(filename, "w") as f:
+            for workout in workouts:
+                workout_log_id = workout[0]
+                f.write(f"Workout Log ID: {workout[0]}\n")
+                f.write(f"Exercise: {workout[1]}\n")
+                f.write(f"Duration: {workout[2]} minutes\n")
+                f.write(f"Notes: {workout[3]}\n")
+                formatted_date = workout[4].strftime("%-d %B %Y at %H:%M")
+                f.write(f"Date: {formatted_date}\n\n")
+
+                # Save sets too
+                set_query = '''
+                SELECT set_number, reps, weight, distance_km, duration_seconds, rest_seconds
+                FROM exercise_sets
+                WHERE workout_log_id = %s
+                ORDER BY set_number ASC
+                '''
+                self.cursor.execute(set_query, (workout_log_id,))
+                sets = self.cursor.fetchall()
+
+                if sets:
+                    f.write("Exercise Sets:\n")
+                    for s in sets:
+                        f.write(f" Set {s[0]}:\n")
+                        f.write(f"  Reps: {s[1] if s[1] is not None else 'N/A'}\n")
+                        f.write(f"  Weight: {s[2]} Kg\n" if s[2] is not None else "  Weight: N/A\n")
+                        f.write(f"  Distance: {s[3]} Km\n" if s[3] is not None else "  Distance: N/A\n")
+                        f.write(f"  Duration: {s[4]} seconds\n" if s[4] is not None else "  Duration: N/A\n")
+                        f.write(f"  Rest: {s[5]} seconds\n" if s[5] is not None else "  Rest: N/A\n")
+                    f.write("\n")
+                else:
+                    f.write("No sets recorded for this workout.\n\n")
+        print(f"All workouts have been saved to {filename}!")
