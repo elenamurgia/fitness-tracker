@@ -1,4 +1,4 @@
-import datetime
+# Elena's code
 
 class WorkoutLog:
     def __init__(self, cursor, conn):
