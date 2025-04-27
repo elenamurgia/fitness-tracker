@@ -1,6 +1,4 @@
 from AUTH.auth import UserAuth
-from DB.workout_log import WorkoutLog
-from DB.db_utils import get_connection
 import requests
 import random
 from DB.workout_log import WorkoutLog
