@@ -3,9 +3,7 @@ from DB.workout_log import WorkoutLog
 from DB.db_utils import get_connection
 import requests
 import random
-
 from DB.workout_log import WorkoutLog
-
 
 def main_menu(cursor, conn):
     auth = UserAuth(cursor, conn)
@@ -30,6 +28,7 @@ def main_menu(cursor, conn):
         else:
             print("Invalid input. Try again.")
 
+# Elena's code
 def logged_in_menu(cursor, conn, user_id):
     workout_log = WorkoutLog(cursor, conn)
     while True:
