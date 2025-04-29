@@ -1,13 +1,13 @@
-from AUTH.auth import login, register
-from DB.db_utils import get_connection
+from AUTH.auth import UserAuth
 import requests
 import random
+from DB.workout_log import WorkoutLog
 
 def main_menu(cursor, conn):
-    user_id = None
+    auth = UserAuth(cursor, conn)
 
     while True:
-        print("\nFITNESS APP")
+        print("\nWelcome to Fitness App")
         print("Select a number to choose an option:")
         print("1. Login")
         print("2. Register")
@@ -15,38 +15,104 @@ def main_menu(cursor, conn):
         choice = input("Choose an option: ")
 
         if choice == "1":
-            user_id = login(cursor)
+            user_id = auth.login()
             if user_id:
                 logged_in_menu(cursor, conn, user_id)
         elif choice == "2":
-            register(cursor, conn)
+            auth.register()
         elif choice == "3":
             print("Buh-byeeee!")
             break
         else:
             print("Invalid input. Try again.")
 
+# Elena's code
 def logged_in_menu(cursor, conn, user_id):
+    workout_log = WorkoutLog(cursor, conn)
     while True:
         # print("\nLogged in")
         print("\nMAIN MENU")
         print("Select a number to choose an option:")
-        print("1. View All Workouts")
-        print("2. View by Category (arms, legs, chest, etc.)")
-        print("3. Log New Workout")
-        print("4. View Favorites")
-        print("5. Logout")
+        print("1. View Workout Menu")
+        print("2. Browse by Category (arms, legs, chest, etc.)")
+        print("3. Logout")
         choice = input(">> ")
 
         if choice == "1":
-            view_all_workouts(cursor, user_id) # TODO: Will come from class (Al of these are to be modified! just put them here so it's not empty)
+            print("\nWORKOUT MENU")
+            print("1. View Past Workouts")
+            print("2. Log New Workout")
+            print("3. View Progress")
+            print("4. View Favourites")
+            print("5. Go back to the Main Menu")
+            print("6. Logout")
+            choice_workout_menu = input(">> ")
+            if choice_workout_menu == "1":
+                workouts = workout_log.view_all_logged_workouts(user_id)
+                if workouts:
+                    workouts = workout_log.view_all_logged_workouts(user_id)
+
+                    if workouts:
+                        print("\nYour workout Log:")
+                        for w in workouts:
+                            workout_log_id = w[0]
+                            print(f"Log ID: {w[0]}")
+                            print(f"Exercise: {w[1]}")
+                            print(f"Duration: {w[2]} minutes")
+                            print(f"Notes: {w[3]}")
+                            formatted_date = w[4].strftime("%-d %B %Y at %H:%M")
+                            print(f"Date: {formatted_date}\n")
+                            workout_log.view_sets_for_workout(workout_log_id)
+
+                        while True:
+                            print("\nWhat would you like to do?")
+                            print("1. Save a specific workout")
+                            print("2. Save all workouts")
+                            print("3. Go back to the Workout Menu")
+                            save_to_file_choice = input(">> ")
+
+                            if save_to_file_choice == '1':
+                                log_id = input("Enter the Log ID to save: ")
+                                if not log_id.isdigit():
+                                    print("Please enter a valid number")
+                                    continue
+
+                                log_id = int(log_id)
+                                workout_to_save = None
+                                for w in workouts:
+                                    if w[0] == log_id:
+                                        workout_to_save = w
+                                        break
+
+                                if workout_to_save:
+                                    workout_log.save_workout_to_file(workout_to_save, log_id)
+                                    break  # Go back after saving
+                                else:
+                                    print("Invalid Log ID")
+                            elif save_to_file_choice == '2':
+                                workout_log.save_all_workouts_to_file(workouts)  # <-- we'll use the new function here
+                                break
+                            elif save_to_file_choice == '3':
+                                break
+                            else:
+                                print("Invalid choice. Please enter 1, 2, or 3.")
+                        else:
+                            print("Workout has not been saved.")
+            elif choice_workout_menu == "2":
+                workout_log.workout_log(user_id)
+            elif choice_workout_menu == "3":
+                view_progress() # Nora's code to be added
+            elif choice == "4":
+                view_favorites(cursor, user_id)  # Ekta's code to be added
+            elif choice_workout_menu == "5":
+                continue
+            elif choice_workout_menu == "6":
+                break
+            else:
+                print("Invalid choice. Try again.")
         elif choice == "2":
-            view_category_workouts(cursor) # TODO: Will come from class
+            view_category_workouts(cursor) # Paula's code?
         elif choice == "3":
-            log_workout(cursor, conn, user_id) # TODO: Will come from class
-        elif choice == "4":
-            view_favorites(cursor, user_id) # TODO: Will come from class
-        elif choice == "5":
             print("Logged out.")
             break
         else:

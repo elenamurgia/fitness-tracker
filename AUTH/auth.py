@@ -2,8 +2,9 @@ import getpass
 import mysql.connector
 
 class UserAuth:
-    def __init__(self, db_cursor):
+    def __init__(self, db_cursor, db_conn):
         self.cursor = db_cursor
+        self.conn = db_conn
 
     def login(self):
         """Handles user login."""
@@ -25,18 +26,25 @@ class UserAuth:
 
     def register(self):
         """Handles user registration."""
+        print("Debug: Entered register()") #Debug line
         username = input("Choose a username: ").strip()
         password = getpass.getpass("Choose a password: ").strip()
+        print(f"DEBUG: Looking for username: {username} and password: {password}")  # Debugging line
 
-        self.cursor.execute("SELECT * FROM Users WHERE username = %s", (username,))
-        if self.cursor.fetchone():
-            print("Username already exists. Try another.")
-            return
+        try:
+            self.cursor.execute("SELECT * FROM Users WHERE username = %s", (username,))
+            if self.cursor.fetchone():
+                print("Username already exists. Try another.")
+                return
 
-        self.cursor.execute(
-            "INSERT INTO Users (username, user_password) VALUES (%s, %s)",
-            (username, password)
-        )
-        self.cursor.connection.commit()
-        print("Registration successful. You can now log in.")
-
+            print("DEBUG: Inserting new user now...")
+            self.cursor.execute(
+                "INSERT INTO Users (username, user_password) VALUES (%s, %s)",
+                (username, password)
+            )
+            self.conn.commit()
+            print("Registration successful. You can now log in.")
+            input("Press Enter to return to the main menu.")
+        except Exception as e:
+            print(f"Registration failed: {e}")
+            return None

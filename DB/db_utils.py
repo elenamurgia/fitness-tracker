@@ -1,7 +1,6 @@
 from config import db_config
 import mysql.connector
 
-
 #This function creates a connection using the config file (please refer to config file for more instructions)
 def get_connection():
     return mysql.connector.connect(
@@ -21,7 +20,7 @@ class ExerciseDB:
     def get_exercise_db(self, muscle):
         db_connection = None
         try:
-            db_connection = self.connector.get_connection()
+            db_connection = self.connector
             cur = db_connection.cursor()
             print("Connected to DB")#Debug message
 
