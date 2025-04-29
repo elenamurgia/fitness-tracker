@@ -19,7 +19,7 @@ def favicon():
 def home():
     return 'Welcome to the CFG Fitness App'
 
-# Class to fetch a user exercise from the db
+# Fetch a user exercise from the db
 @app.route("/user_exercises", methods=["GET"])
 def get_exercises_muscle_db():
     muscle = request.args.get("muscle", "").strip().lower()

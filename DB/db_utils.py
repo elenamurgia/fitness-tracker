@@ -20,7 +20,7 @@ class ExerciseDB:
     def get_exercise_db(self, muscle):
         db_connection = None
         try:
-            db_connection = self.connector
+            db_connection = get_connection()
             cur = db_connection.cursor()
             print("Connected to DB")#Debug message
 
@@ -38,10 +38,7 @@ class ExerciseDB:
             #Create a list of dictionaries by pairing column names with the values from each row
             result = [dict(zip(columns,row)) for row in rows]
 
-            cur.close()
-
             return result
-
 
         finally:
             if db_connection:

@@ -11,6 +11,8 @@ db_config = {
     "DB_USER": os.getenv("DB_USER"),
     "DB_PASSWORD": os.getenv("DB_PASSWORD"),
     "DB_NAME": os.getenv("DB_NAME")
-    # Add API key
 }
+
+#API key
+API_KEY = os.getenv('API_KEY')
 

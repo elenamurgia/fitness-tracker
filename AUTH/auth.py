@@ -28,6 +28,9 @@ class UserAuth:
         """Handles user registration."""
         print("Debug: Entered register()") #Debug line
         username = input("Choose a username: ").strip()
+
+        print("Debug:Entered user_name()") #Paula debug line
+
         password = getpass.getpass("Choose a password: ").strip()
         print(f"DEBUG: Looking for username: {username} and password: {password}")  # Debugging line
 
