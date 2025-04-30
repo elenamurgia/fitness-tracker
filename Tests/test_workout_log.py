@@ -1,7 +1,7 @@
 import pytest
 from API.fitness_api import app
 
-# Creates a test client for the Flask app."""
+# Creates a test client for the Flask app.
 @pytest.fixture()
 def client():
     app.config.update({

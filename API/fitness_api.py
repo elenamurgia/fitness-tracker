@@ -1,5 +1,4 @@
 import os
-from socket import create_connection
 from flask import Flask, jsonify, request, send_from_directory
 from DB.db_utils import ExerciseDB, get_connection
 

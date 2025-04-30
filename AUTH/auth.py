@@ -11,8 +11,6 @@ class UserAuth:
         username = input("Username: ").strip()
         password = getpass.getpass("Password: ").strip()
 
-        print(f"DEBUG: Looking for username: {username} and password: {password}")  # Debugging line
-
         query = "SELECT user_id FROM Users WHERE username = %s AND user_password = %s"
         self.cursor.execute(query, (username, password))
         result = self.cursor.fetchone()
@@ -26,21 +24,18 @@ class UserAuth:
 
     def register(self):
         """Handles user registration."""
-        print("Debug: Entered register()") #Debug line
         username = input("Choose a username: ").strip()
 
         print("Debug:Entered user_name()") #Paula debug line
 
         password = getpass.getpass("Choose a password: ").strip()
-        print(f"DEBUG: Looking for username: {username} and password: {password}")  # Debugging line
 
         try:
             self.cursor.execute("SELECT * FROM Users WHERE username = %s", (username,))
             if self.cursor.fetchone():
-                print("Username already exists. Try another.")
+                print("Username already exists. Try another or press 1 to log in.")
                 return
 
-            print("DEBUG: Inserting new user now...")
             self.cursor.execute(
                 "INSERT INTO Users (username, user_password) VALUES (%s, %s)",
                 (username, password)
