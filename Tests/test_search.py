@@ -55,18 +55,6 @@ def test_get_exercises_muscle_db(mock_get):
     mock_get.assert_called_with("http://testserver/user_exercises", params={'muscle': 'chest'})
 
 
-#Amber's code
-# def test_user_exercises_missing_param(client):
-#     response = client.get('/user_exercises')
-#     assert response.status_code == 400
-#     assert response.json == {"error": "Missing muscle parameter"}
-#
-# @patch('app.exercise_db.get_exercise_db')
-# def test_user_exercises_with_valid_param(mock_get_exercise_db, client):
-#     mock_get_exercise_db.return_value = [{"name": "Push-up", "muscle": "chest"}]
-#     response = client.get('/user_exercises?muscle=chest')
-#     assert response.status_code == 200
-#     assert response.json == [{"name": "Push-up", "muscle": "chest"}]
 
 
 

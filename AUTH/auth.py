@@ -1,5 +1,5 @@
 import getpass
-import mysql.connector
+
 
 class UserAuth:
     def __init__(self, db_cursor, db_conn):
