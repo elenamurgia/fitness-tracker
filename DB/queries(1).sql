@@ -1,28 +1,30 @@
-CREATE DATABASE Fitness_app; 
+DROP DATABASE IF EXISTS Fitness_app;
+CREATE DATABASE fitness_app;
+-- Nora: I made all the tables and column names small caps to keep it consistent and avoid potential typos.
 
-USE Fitness_app;
+USE fitness_app;
 
--- CREATE TABLE Users (
--- 	user_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
---     username VARCHAR(50),
---     user_password VARCHAR(255),
---     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP()
--- );
+ CREATE TABLE users (
+    user_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    username VARCHAR(50),
+    user_password VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP()
+ );
 
-CREATE TABLE Exercises (     --data will be taken from the Ninja API and stored in this table
-    exercise_id SERIAL PRIMARY KEY,
+CREATE TABLE exercises (     -- data will be taken from the Ninja API and stored in this table
+    exercise_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,
-    type VARCHAR(50),            
-    muscle VARCHAR(50),           
-    difficulty VARCHAR(20),       
-    equipment VARCHAR(100),       
-    instructions TEXT            
+    type VARCHAR(50),
+    muscle VARCHAR(50),
+    difficulty VARCHAR(20),
+    equipment VARCHAR(100),
+    instructions TEXT
 );
 
-CREATE TABLE Workout_Log (
-    Workout_log_id SERIAL PRIMARY KEY,
+CREATE TABLE workout_log (
+    workout_log_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     user_id INTEGER NOT NULL,
-    exercise_id INTEGER,                
+    exercise_id INTEGER,
     log_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     start_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     end_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -35,24 +37,42 @@ CREATE TABLE Workout_Log (
 );
 
 
-CREATE TABLE Exercise_Sets (
-    set_id SERIAL PRIMARY KEY,
-    Workout_log_id INTEGER NOT NULL,  -- Link to the session-specific exercise entry
+CREATE TABLE exercise_sets (
+    set_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    workout_log_id INTEGER NOT NULL,  -- Link to the session-specific exercise entry
     set_number INTEGER NOT NULL,       -- The order of the set (e.g. 1, 2, 3)
     reps INTEGER,
-    weight DECIMAL(5,2),    
+    weight DECIMAL(5,2),
     distance_km DECIMAL(5,2),
     duration_seconds INTEGER,          -- For timed sets
     rest_seconds INTEGER,              -- rest taken before next set
 
-    FOREIGN KEY (Workout_log_id) REFERENCES Workout_Log(Workout_log_id)
+    FOREIGN KEY (workout_log_id) REFERENCES workout_log(workout_log_id)
 );
 
-INSERT INTO Exercises
+
+-- Mock data for Elena's tests
+INSERT INTO users (username, user_password)
 VALUES
-('102', 'Incline Hammer Curls', 'strength', 'biceps', 'beginner', 'dumbbell', 'instructions'),
-('103', 'Barbell Squat', 'strength', 'quadriceps', 'intermediate', 'barbell', 'Stand with feet shoulder-width apart, barbell resting on shoulders, squat down and back up.'),
-('104', 'Push-Up', 'strength', 'chest', 'beginner', 'bodyweight', 'Start in plank position, lower chest to the ground, then push back up.'),
-('105', 'Seated Cable Row', 'strength', 'back', 'intermediate', 'cable', 'Sit on the bench, grasp the handle, and pull toward your torso.'),
-('106', 'Lateral Raise', 'strength', 'shoulders', 'beginner', 'dumbbell', 'With arms at sides, raise dumbbells laterally to shoulder height.'),
-('107', 'Leg Press', 'strength', 'glutes', 'beginner', 'machine', 'Sit in the leg press machine and push the platform with your feet.');
+('tester', 'test123');
+
+
+-- Mock data for Elena's tests
+INSERT INTO Exercises (name, type, muscle, difficulty, equipment, instructions)
+VALUES
+('Push-Up', 'strength', 'chest', 'beginner', 'none', 'Start in a plank position. Lower your body and push back up.'),
+('Squat', 'strength', 'legs', 'beginner', 'none', 'Stand with feet shoulder-width apart. Bend your knees and lower your body.'),
+('Bicep Curl', 'strength', 'arms', 'intermediate', 'dumbbells', 'Curl the dumbbells up while keeping your elbows close to your sides.'),
+('Plank', 'isometric', 'core', 'intermediate', 'none', 'Hold your body in a straight line, supported on your forearms and toes.'),
+('Deadlift', 'strength', 'back', 'advanced', 'barbell', 'Lift the barbell from the floor while keeping your back straight.');
+
+-- Mock data for Elena's tests
+INSERT INTO workout_log (user_id, exercise_id, duration_minutes, notes)
+VALUES
+(1, 1, 30, 'Test workout');
+
+-- Mock data for Elena's tests
+INSERT INTO exercise_sets (workout_log_id, set_number, reps, weight, distance_km, duration_seconds, rest_seconds)
+VALUES
+(1, 1, 10, 40.0, NULL, 60, 30),
+(1, 2, 8, 45.0, NULL, 55, 30);

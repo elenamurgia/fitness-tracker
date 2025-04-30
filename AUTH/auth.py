@@ -1,16 +1,14 @@
 import getpass
-import mysql.connector
 
 class UserAuth:
-    def __init__(self, db_cursor):
+    def __init__(self, db_cursor, db_conn):
         self.cursor = db_cursor
+        self.conn = db_conn
 
     def login(self):
         """Handles user login."""
         username = input("Username: ").strip()
         password = getpass.getpass("Password: ").strip()
-
-        print(f"DEBUG: Looking for username: {username} and password: {password}")  # Debugging line
 
         query = "SELECT user_id FROM Users WHERE username = %s AND user_password = %s"
         self.cursor.execute(query, (username, password))
@@ -28,15 +26,19 @@ class UserAuth:
         username = input("Choose a username: ").strip()
         password = getpass.getpass("Choose a password: ").strip()
 
-        self.cursor.execute("SELECT * FROM Users WHERE username = %s", (username,))
-        if self.cursor.fetchone():
-            print("Username already exists. Try another.")
-            return
+        try:
+            self.cursor.execute("SELECT * FROM Users WHERE username = %s", (username,))
+            if self.cursor.fetchone():
+                print("Username already exists. Try another or press 1 to log in.")
+                return
 
-        self.cursor.execute(
-            "INSERT INTO Users (username, user_password) VALUES (%s, %s)",
-            (username, password)
-        )
-        self.cursor.connection.commit()
-        print("Registration successful. You can now log in.")
-
+            self.cursor.execute(
+                "INSERT INTO Users (username, user_password) VALUES (%s, %s)",
+                (username, password)
+            )
+            self.conn.commit()
+            print("Registration successful. You can now log in.")
+            input("Press Enter to return to the main menu.")
+        except Exception as e:
+            print(f"Registration failed: {e}")
+            return None

@@ -1,12 +1,16 @@
-# If not already present, create a .env.txt file in the same directory as this script with your database credentials
+# If not already present, create a .env file in the same directory as this script with your database credentials
 
-def load_db_config(path=".env.txt"): # default path to .env.txt
-    config = {}
-    with open(path) as f:
-        for line in f:
-            if line.strip() and not line.startswith("#"):
-                key, value = line.strip().split("=", 1)
-                config[key] = value
-    return config
+from dotenv import load_dotenv
+import os
 
-db_config = load_db_config()
+# Load environment variables from the .env file
+load_dotenv()
+
+db_config = {
+    "DB_HOST": os.getenv("DB_HOST"),
+    "DB_USER": os.getenv("DB_USER"),
+    "DB_PASSWORD": os.getenv("DB_PASSWORD"),
+    "DB_NAME": os.getenv("DB_NAME")
+    # Add API key
+}
+
