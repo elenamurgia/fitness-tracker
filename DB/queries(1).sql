@@ -1,4 +1,4 @@
-DROP DATABASE IF EXISTS Fitness_app;
+DROP DATABASE IF EXISTS fitness_app;
 CREATE DATABASE fitness_app;
 -- Nora: I made all the tables and column names small caps to keep it consistent and avoid potential typos.
 
