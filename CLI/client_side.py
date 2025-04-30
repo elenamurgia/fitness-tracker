@@ -2,6 +2,8 @@ from AUTH.auth import UserAuth
 import requests
 import random
 from DB.workout_log import WorkoutLog
+from config import API_KEY
+
 
 def main_menu(cursor, conn):
     auth = UserAuth(cursor, conn)
@@ -124,7 +126,7 @@ def logged_in_menu(cursor, conn, user_id):
             else:
                 print("Invalid choice. Try again.")
         elif choice == "2":
-            view_category_workouts(cursor) # Paula's code
+            view_category_workouts() # Paula's code
         elif choice == "3":
             # Log out of the app
             print("Logged out.")
@@ -238,12 +240,11 @@ class ExerciseSearchDB:
             print(f"Something went wrong: {exc}")
 
 
-def run():
+def view_category_workouts():
     use_api= input("Would you like to get an exercise suggestion (a) or get one of your stored exercises(b)? a or b").strip().lower()
 
     if use_api == 'a':
-        api_key = 'PUqC/ymrWK3KZfX18W5D6w==bprqyCE3al8voELK'
-        exercise_searcher_API = ExerciseSearchAPI(api_key)
+        exercise_searcher_API = ExerciseSearchAPI(API_KEY)
         exercise_searcher_API.run()
     elif use_api == 'b':
         base_url = "http://127.0.0.1:5000/"
