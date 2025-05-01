@@ -93,7 +93,7 @@ class WorkoutClient:
 
         # Handle the response
         if response.status_code == 201:
-            print(" Workout successfully logged!")
+            print("Workout successfully logged!")
         else:
             try:
                 print(" Failed to log workout:", response.json())
