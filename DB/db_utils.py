@@ -33,14 +33,21 @@ class ExerciseDB:
 
             #Fetches all the results from the query
             rows = cur.fetchall()
-            #Define the column names to map the result rows to dictionary keys
-            columns = ['exercise_id', 'name', 'type', 'muscle', 'difficulty', 'equipment', 'instructions']
-            #Create a list of dictionaries by pairing column names with the values from each row
-            result = [dict(zip(columns,row)) for row in rows]
 
+            result = [
+                {"exercise_id": row[0],
+                 "name": row[1],
+                 "type": row[2],
+                 "muscle": row[3],
+                 "difficulty": row[4],
+                 "equipment": row[5],
+                 "instructions": row[6],
+                 }
+                for row in rows
+            ]
             return result
 
         finally:
             if db_connection:
                 db_connection.close()
-                print("DB connection is closed")#Debug message
+

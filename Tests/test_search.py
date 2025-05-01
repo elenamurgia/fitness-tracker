@@ -4,13 +4,14 @@ from unittest.mock import patch, Mock
 from CLI.client_side import ExerciseSearchDB
 from CLI.client_side import ExerciseSearchAPI
 
-#test: user enters normal string: should return lowercase, stripped string
+#Test: user enters normal string: should return lowercase, stripped string
 @patch('builtins.input', return_value= '  Chest  ')
 def test_get_muscle_from_user(mock_input):
     instance = ExerciseSearchAPI("https://testserver")
     result = instance.get_muscle_from_user()
     assert result == 'chest'
 
+#Test that function get_exercise_api correctly sends a GET request and returns the expected mock response from the API
 @patch('requests.get') # mocks requests.get
 def test_get_exercise_api(mock_get):
     mock_response_data = [{"Name: Close-grip bench press", "Type: strength", "Equipment needed: barbell",
@@ -34,13 +35,14 @@ def test_get_exercise_api(mock_get):
     assert response.status_code ==200
     assert response.json() == mock_response_data
 
-#test: user enters normal string: should return lowercase, stripped string
+#Test: user enters normal string: should return lowercase, stripped string
 @patch('builtins.input', return_value= '  Chest  ')
 def test_get_muscle_from_user_db(mock_input):
     search = ExerciseSearchDB("https://testserver")
     result = search.get_muscle_from_user_db()
     assert result == 'chest'
 
+#Test that function get_exercises_muscle_db correctly sends a GET request and returns the expected mock response
 @patch('requests.get') # mocks requests.get
 def test_get_exercises_muscle_db(mock_get):
     mock_response_data = [{"Name: Close-grip bench press", "Type: strength", "Equipment needed: barbell",

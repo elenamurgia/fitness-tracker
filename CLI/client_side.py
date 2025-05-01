@@ -126,7 +126,7 @@ def logged_in_menu(cursor, conn, user_id):
             else:
                 print("Invalid choice. Try again.")
         elif choice == "2":
-            view_category_workouts() # Paula's code
+            view_category_workouts()
         elif choice == "3":
             # Log out of the app
             print("Logged out.")
@@ -134,13 +134,9 @@ def logged_in_menu(cursor, conn, user_id):
         else:
             print("Invalid choice. Try again.")
 
-
-
-
 #--------------Paula code ------------
 
-
-"""The ExerciseSearchAPI clas provides a simple interface for users to search for workout exercises"
+"""The ExerciseSearchAPI class provides a simple interface for users to search for workout exercises"
   based on a targeted muscle group using the API Ninjas Exercise API.
   It handles:
   - Taking user input for a muscle group.
@@ -171,10 +167,6 @@ class ExerciseSearchAPI:
 
     def display_results_api(self, response):
         # Displays the exercise result
-
-        #print(f"DEBUG: Status Code: {response.status_code}") #Debugg print
-        #print(f"DEBUG: Raw Response Text: {response.text}\n") #Debugg print
-
         if response.status_code == 200: #If the request is successful
             exercises = response.json()
             if exercises:#if the result is not empty
