@@ -2,6 +2,7 @@ from AUTH.auth import UserAuth
 import requests
 import random
 from DB.workout_log import WorkoutLog
+from DB.db_utils import UserProgressTracker
 from config import API_KEY
 
 
@@ -113,7 +114,7 @@ def logged_in_menu(cursor, conn, user_id):
 
             elif choice_workout_menu == "3":
                 # View progress - function to be added (Nora's code)
-                view_progress()
+                view_user_progress(conn, user_id)
             elif choice == "4":
                 # View favourite workouts - function to be added (Ekta's code)
                 view_favorites(cursor, user_id)  # Ekta's code to be added
@@ -263,13 +264,14 @@ def view_user_progress(conn, user_id):
         print("\nThere is not enough workouts recorded to see your progress over the last two weeks yet. Please try logging some more workouts over the following days.")
         return
     
-    print("\nYOUR PROGRESS (Last 7 Days vs Previous 7 Days)")
+    print("\nYOUR PROGRESS\n(Last 7 Days vs Previous 7 Days)")
+    print("\n===================================")
     print(f"Workouts completed: {progress['current_workouts']} ({progress['workout_difference']:+} from previous period)")
     print(f"Total minutes: {progress['current_minutes']} ({progress['minutes_difference']:+} minutes)")
 
     # Add encouragement based on the user's progress
     if progress['workout_difference'] > 0:
         print("\nGreat job! You're more active than last week!")
-    elif progress['workout_difference'] < 0:
+    elif progress['workout_difference'] <= 0:
         print("\nSome weeks are slower than others, and that's okay, we all deserve a good rest!")
 
