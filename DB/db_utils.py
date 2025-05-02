@@ -70,13 +70,13 @@ class UserProgressTracker:
         db_connection = None
 
         try:
-            db_connection = self.connector.get_connection()
+            db_connection = get_connection()
             cur = db_connection.cursor()
-            print("Connected to DB") #Debug message
+            print("Connected to DB")#Debug message
 
             # SQL Query to fetch data from the workout_log table
             query = """ 
-                SELECT (
+                SELECT 
                     (SELECT COUNT(*) FROM workout_log 
                     WHERE user_id = %s AND log_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)) AS recent_workouts,
                     
@@ -90,7 +90,7 @@ class UserProgressTracker:
                     (SELECT COALESCE(SUM(duration_minutes), 0) FROM workout_log
                     WHERE user_id = %s AND log_date BETWEEN DATE_SUB(CURDATE(), INTERVAL 14 DAY)
                     AND DATE_SUB(CURDATE(), INTERVAL 7 DAY)) AS previous_minutes 
-                )
+                
                 """
             
             # user_id 4 times because SQL query has 4 subqueries, each needing a parameter user_id.
