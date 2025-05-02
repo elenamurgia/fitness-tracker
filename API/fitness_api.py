@@ -14,21 +14,21 @@ db = WorkoutDiaryDB()
 EXERCISE_API_URL = "https://api.api-ninjas.com/v1/exercises"
 API_KEY = Config.API_NINJAS_KEY  # Store this in config.py securely
 # used to test api data
-@app.route('/api/exercise-search', methods=['GET'])
-def search_exercise():
-    name = request.args.get('name')
-    if not name:
-        return jsonify({"error": "Please provide an exercise name using the 'name' query param"}), 400
-
-    try:
-        response = requests.get(EXERCISE_API_URL, params={"name": name}, headers={"X-Api-Key": API_KEY})
-        response.raise_for_status()
-        return jsonify(response.json()), 200
-    except requests.exceptions.RequestException as e:
-        return jsonify({"error": str(e)}), 500
+# @app.route('/api/exercise-search', methods=['GET'])
+# def search_exercise():
+#     name = request.args.get('name')
+#     if not name:
+#         return jsonify({"error": "Please provide an exercise name using the 'name' query param"}), 400
+#
+#     try:
+#         response = requests.get(EXERCISE_API_URL, params={"name": name}, headers={"X-Api-Key": API_KEY})
+#         response.raise_for_status()
+#         return jsonify(response.json()), 200
+#     except requests.exceptions.RequestException as e:
+#         return jsonify({"error": str(e)}), 5000
 
 # --- Route: Log Workout to DB ---
-
+#Deborah's
 @app.route('/api/workout-diary', methods=['GET'])
 def get_workout_diary():
     user_id = request.args.get('user_id', type=int)

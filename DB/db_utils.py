@@ -44,25 +44,25 @@ class WorkoutDiaryDB:
         self.conn = _connect_to_db()
         self.cursor = self.conn.cursor(dictionary=True)
 
-    def insert_workout_log(self, user_id, exercise_id, start_time, end_time, duration_minutes, notes):
-        query = """
-            INSERT INTO Workout_Log (user_id, exercise_id, start_time, end_time, duration_minutes, notes)
-            VALUES (%s, %s, %s, %s, %s, %s)
-        """
-        self.cursor.execute(query, (user_id, exercise_id, start_time, end_time, duration_minutes, notes))
-        self.conn.commit()
-        return self.cursor.lastrowid  # Return the new workout_log_id
-
-    def insert_exercise_set(self, workout_log_id, set_number, reps, weight, distance_km, duration_seconds, rest_seconds):
-        query = """
-            INSERT INTO Exercise_Sets (
-                workout_log_id, set_number, reps, weight, distance_km, duration_seconds, rest_seconds
-            ) VALUES (%s, %s, %s, %s, %s, %s, %s)
-        """
-        self.cursor.execute(query, (
-            workout_log_id, set_number, reps, weight, distance_km, duration_seconds, rest_seconds
-        ))
-        self.conn.commit()
+    # def insert_workout_log(self, user_id, exercise_id, start_time, end_time, duration_minutes, notes):
+    #     query = """
+    #         INSERT INTO Workout_Log (user_id, exercise_id, start_time, end_time, duration_minutes, notes)
+    #         VALUES (%s, %s, %s, %s, %s, %s)
+    #     """
+    #     self.cursor.execute(query, (user_id, exercise_id, start_time, end_time, duration_minutes, notes))
+    #     self.conn.commit()
+    #     return self.cursor.lastrowid  # Return the new workout_log_id
+    #
+    # def insert_exercise_set(self, workout_log_id, set_number, reps, weight, distance_km, duration_seconds, rest_seconds):
+    #     query = """
+    #         INSERT INTO Exercise_Sets (
+    #             workout_log_id, set_number, reps, weight, distance_km, duration_seconds, rest_seconds
+    #         ) VALUES (%s, %s, %s, %s, %s, %s, %s)
+    #     """
+    #     self.cursor.execute(query, (
+    #         workout_log_id, set_number, reps, weight, distance_km, duration_seconds, rest_seconds
+    #     ))
+    #     self.conn.commit()
 
     def get_workout_logs(self, user_id, start_date, end_date):
         query = """
@@ -76,15 +76,15 @@ class WorkoutDiaryDB:
         self.cursor.execute(query, (user_id, start_date, end_date))
         return self.cursor.fetchall()
 
-    def get_sets_for_workout(self, workout_log_id):
-        query = """
-            SELECT set_number, reps, weight, distance_km, duration_seconds, rest_seconds
-            FROM Exercise_Sets
-            WHERE workout_log_id = %s
-            ORDER BY set_number
-        """
-        self.cursor.execute(query, (workout_log_id,))
-        return self.cursor.fetchall()
+    # def get_sets_for_workout(self, workout_log_id):
+    #     query = """
+    #         SELECT set_number, reps, weight, distance_km, duration_seconds, rest_seconds
+    #         FROM Exercise_Sets
+    #         WHERE workout_log_id = %s
+    #         ORDER BY set_number
+    #     """
+    #     self.cursor.execute(query, (workout_log_id,))
+    #     return self.cursor.fetchall()
 
     def close(self):
         self.cursor.close()
