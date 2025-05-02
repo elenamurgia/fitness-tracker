@@ -264,17 +264,15 @@ def view_user_progress(conn, user_id):
         print("\nThere is not enough workouts recorded to see your progress over the last two weeks yet. Please try logging some more workouts over the following days.")
         return
     
+    print("\n=============================================================")
     print("\nYOUR PROGRESS\n(Last 7 Days vs Previous 7 Days)")
-    print("===========================================\n")
-    print(f"Workouts completed: {progress['current_workouts']} ({progress['workout_difference']:+} from previous period)")
+    print(f"\nWorkouts completed: {progress['current_workouts']} ({progress['workout_difference']:+} from previous period)")
     print(f"Total minutes: {progress['current_minutes']} ({progress['minutes_difference']:+} minutes)")
 
     # Add encouragement based on the user's progress
     if progress['workout_difference'] > 0:
-        print("===========================================")
         print("\nGreat job! You're more active than last week!")
-        print("===========================================")
+        print("\n=============================================================")
     elif progress['workout_difference'] <= 0:
-        print("===========================================")
         print("\nSome weeks are slower than others, and that's okay, we all deserve a good rest!")
-        print("===========================================")
+        print("\n=============================================================")
