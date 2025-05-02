@@ -28,39 +28,6 @@ def search_exercise():
         return jsonify({"error": str(e)}), 500
 
 # --- Route: Log Workout to DB ---
-@app.route('/api/workout-diary', methods=['POST'])
-def log_workout():
-    try:
-        data = request.get_json()
-
-        user_id = data['user_id']
-        exercise_id = data['exercise_id']
-        start_time = data.get('start_time', datetime.now().isoformat())
-        end_time = data.get('end_time', datetime.now().isoformat())
-        duration_minutes = data.get('duration_minutes', 0)
-        notes = data.get('notes', '')
-
-        # Insert workout log
-        workout_log_id = db.insert_workout_log(
-            user_id, exercise_id, start_time, end_time, duration_minutes, notes
-        )
-
-        # Insert each set
-        for set_data in data.get('sets', []):
-            db.insert_exercise_set(
-                workout_log_id=workout_log_id,
-                set_number=set_data.get('set_number'),
-                reps=set_data.get('reps'),
-                weight=set_data.get('weight'),
-                distance_km=set_data.get('distance_km'),
-                duration_seconds=set_data.get('duration_seconds'),
-                rest_seconds=set_data.get('rest_seconds')
-            )
-
-        return jsonify({"message": "Workout log created successfully"}), 201
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
 
 @app.route('/api/workout-diary', methods=['GET'])
 def get_workout_diary():
