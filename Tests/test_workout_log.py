@@ -1,4 +1,5 @@
 import pytest
+import random
 from API.fitness_api import app
 
 # Creates a test client for the Flask app.
@@ -114,8 +115,9 @@ def test_get_sets_user_not_found(client):
 # Test posting a valid exercise set
 def test_post_set_success(client):
     ensure_user_exists("tester")
+    set_number = random.randint(1000, 1999)
     payload = {
-        "set_number": 3,
+        "set_number": set_number,
         "reps": 15,
         "weight": 50.0,
         "distance_km": None,
