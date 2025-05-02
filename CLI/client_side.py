@@ -242,3 +242,34 @@ def view_category_workouts():
         base_url = "http://127.0.0.1:5000/"
         exercise_searcher_DB = ExerciseSearchDB(base_url)
         exercise_searcher_DB.run()
+
+
+
+
+#--------------Nora's code-----------
+"""
+The ViewUserProgress function implements the user interaction 
+in the Client's side with the UserProgressTracker class 
+defined in db_utils.
+Class that interacts with the DB is defined in db_utils to keep the 
+client side as clean as possibe.
+"""
+def view_user_progress(conn, user_id):
+    """Shows the user a comparison of their progress over the last 7 days vs the previous 7 days."""
+    tracker = UserProgressTracker() # From db_utils
+    progress = tracker.get_7day_progress(user_id)
+
+    if not progress:
+        print("\nThere is not enough workouts recorded to see your progress over the last two weeks yet. Please try logging some more workouts over the following days.")
+        return
+    
+    print("\nYOUR PROGRESS (Last 7 Days vs Previous 7 Days)")
+    print(f"Workouts completed: {progress['current_workouts']} ({progress['workout_difference']:+} from previous period)")
+    print(f"Total minutes: {progress['current_minutes']} ({progress['minutes_difference']:+} minutes)")
+
+    # Add encouragement based on the user's progress
+    if progress['workout_difference'] > 0:
+        print("\nGreat job! You're more active than last week!")
+    elif progress['workout_difference'] < 0:
+        print("\nSome weeks are slower than others, and that's okay, we all deserve a good rest!")
+
