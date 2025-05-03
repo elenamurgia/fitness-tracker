@@ -45,6 +45,7 @@ class ExerciseDB:
                  }
                 for row in rows
             ]
+
             return result
 
         finally:
