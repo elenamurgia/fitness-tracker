@@ -178,7 +178,7 @@ class ExerciseSearchAPI:
                 print(f"Instructions: {exercise['instructions']}")
 
             else:
-                print("No exercises found for this type")#If the list is empty
+                print("No exercises found for this muscle")#If the list is empty
 
     def run(self):
         # Main function to run the class
