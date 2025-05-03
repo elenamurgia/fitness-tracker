@@ -20,9 +20,9 @@ For Windows/PyCharm users: use the terminal and write python app.py to run the s
 
 Follow instructions:
 * To **register** (option number 2), prompt your username and password, and press Enter.
-   (screenshot)
+![A screenshot](https://github.com/elenamurgia/fitness-tracker/blob/main/Images/Screenshot_reg_terminal.png "Screenshot register terminal")
 * To **log in**, choose option 1 and enter your username and password. If the data is not correct, a message will be displayed.
-  (screenshot)
+![A screenshot](https://github.com/elenamurgia/fitness-tracker/blob/main/Images/Screenshot_login_terminal.png "Screenshot login terminal")
 If the login is successful, a message will be displayed to confirm that the user is logged in, and the Main Menu will appear.
 
 1. If the user chooses 1:
@@ -30,9 +30,9 @@ To be Completed
 
 
 2. If the user chooses 2, they could choose between getting a new exercise suggestion or one of the stored exercises:
+Option a (new suggestion from the Ninjas API exercises).
 
-Option a (new suggestion from the Ninjas API exercises):
-(screenshot)
+Option b (exercises related to the muscle from the stored exercises).
+![A screenshot](https://github.com/elenamurgia/fitness-tracker/blob/main/Images/Screenshot_exercise_suggestion_menu.png "Screenshot exercise suggestion terminal")
 
-Option b (exercises related to the muscle from the stored exercises)
-(screenshot)
+
