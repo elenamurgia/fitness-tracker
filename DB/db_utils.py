@@ -4,27 +4,26 @@
 # Each method uses SQL queries to perform actions on the appropriate tables (Workout_Log, Exercise_Sets, Exercises).
 # The class manages its own database connection and cursor, and the connection is closed using the close() method when finished. This structure keeps all database-related operations modular and reusable within your fitness app.
 import mysql.connector
-from config import USER, PASSWORD,HOST,DATABASE
+from config import db_config
 
 class DbConnectionError(Exception):
     pass
 
-def _connect_to_db():
-    connection = mysql.connector.connect(
-        host=HOST,
-        user=USER,
-        auth_plugin='mysql_native_password',
-        password=PASSWORD,
-        database=DATABASE
+#This function creates a connection using the config file (please refer to config file for more instructions)
+def get_connection():
+    return mysql.connector.connect(
+        host=db_config["DB_HOST"],
+        user=db_config["DB_USER"],
+        password=db_config["DB_PASSWORD"],
+        database=db_config["DB_NAME"]
     )
-    return connection
 
 def get_all_records(): # retrieve all records from the 'workout logs'
     fitness_api = 'tests'
     try:
-        db_connection = _connect_to_db()
+        db_connection = get_connection()
         cur = db_connection.cursor()
-        print("Connected to DB: %s" % DATABASE)
+        print(f"Connected to DB: {db_config['DB_NAME']}")
 
         query = """SELECT * FROM Exercises """
         cur.execute(query)
@@ -41,7 +40,7 @@ def get_all_records(): # retrieve all records from the 'workout logs'
 
 class WorkoutDiaryDB:
     def __init__(self):
-        self.conn = _connect_to_db()
+        self.conn = get_connection()
         self.cursor = self.conn.cursor(dictionary=True)
 
     def insert_workout_log(self, user_id, exercise_id, start_time, end_time, duration_minutes, notes):
@@ -90,6 +89,46 @@ class WorkoutDiaryDB:
         self.cursor.close()
         self.conn.close()
 
-if __name__ == "__main__":
-    print("TESTING DB CONNECTION")
-    print (get_all_records())
+
+
+#--------------Paula code-----------
+"""The ExerciseDB class interacts with the database to fetch exercise data based 
+on the user's specified muscle group."""
+class ExerciseDB:
+    def __init__(self):
+        self.connector = get_connection()
+
+    def get_exercise_db(self, muscle):
+        db_connection = None
+        try:
+            db_connection = get_connection()
+            cur = db_connection.cursor()
+            print("Connected to DB")#Debug message
+
+            query = """
+                SELECT exercise_id, name, type, muscle, difficulty, equipment, instructions
+                FROM Exercises
+                WHERE muscle = %s"""
+
+            cur.execute(query, (muscle,))
+
+            #Fetches all the results from the query
+            rows = cur.fetchall()
+
+            result = [
+                {"exercise_id": row[0],
+                 "name": row[1],
+                 "type": row[2],
+                 "muscle": row[3],
+                 "difficulty": row[4],
+                 "equipment": row[5],
+                 "instructions": row[6],
+                 }
+                for row in rows
+            ]
+            return result
+
+        finally:
+            if db_connection:
+                db_connection.close()
+
