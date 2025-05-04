@@ -34,7 +34,6 @@ def logged_in_menu(cursor, conn, user_id):
     # Create an instance of the workout log
     workout_log = WorkoutLog(cursor, conn)
     while True:
-        print("\nLogged in")
         print("\nMAIN MENU")
         print("Select a number to choose an option:")
         print("1. View Workout Menu")
