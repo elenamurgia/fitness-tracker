@@ -141,7 +141,7 @@ def logged_in_menu(cursor, conn, user_id):
   It handles:
   - Taking user input for a muscle group.
   - Sending a GET request to the API with the specified muscle.
-  - Displaying the exercise results in a user-friendly format. Paula
+  - Displaying the exercise results in a user-friendly format.
   """
 
 class ExerciseSearchAPI:
@@ -152,7 +152,7 @@ class ExerciseSearchAPI:
 
     def get_muscle_from_user(self):
         # Asks the user to input a muscle, strips leading and trailing spaces and converts it to lower case
-        muscle = input("Which type of muscle would you like to work?").strip().lower()
+        muscle = input("Which type of muscle would you like to work? ").strip().lower()
 
         return muscle
 
@@ -192,7 +192,7 @@ class ExerciseSearchAPI:
 
 """The ExerciseSearchDB class allows the user to search for exercises from a database.
 By selecting a muscle group. It collects input from the user, makes a GET request to an endpoint,
-parses the JSON response, and displays the results in a readable format. Paula"""
+parses the JSON response, and displays the results in a readable format."""
 class ExerciseSearchDB:
     def __init__(self, base_url):
         #Initialises the class with the base URL of the backend AP.
@@ -200,7 +200,7 @@ class ExerciseSearchDB:
 
     def get_muscle_from_user_db(self):
         # Asks user to input a muscle, removes spaces and converts it to lower case
-        return input("Which type of muscle would you like to work?").strip().lower()
+        return input("Which type of muscle would you like to work ?").strip().lower()
 
     def get_exercises_muscle_db(self, muscle):
         endpoint = f"{self.base_url}/user_exercises" #sets the endpoint url
@@ -233,7 +233,7 @@ class ExerciseSearchDB:
 
 
 def view_category_workouts():
-    use_api= input("Would you like to get an exercise suggestion (a) or get one of your stored exercises(b)? a or b").strip().lower()
+    use_api= input("Would you like to get an exercise suggestion (a) or get one of your stored exercises(b)? a or b ").strip().lower()
 
     if use_api == 'a':
         exercise_searcher_API = ExerciseSearchAPI(API_KEY)
