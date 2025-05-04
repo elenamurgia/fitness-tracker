@@ -113,10 +113,10 @@ def logged_in_menu(cursor, conn, user_id):
 
             elif choice_workout_menu == "3":
                 # View progress - function to be added (Nora's code)
-                view_progress()
+                print("This feature is still working in progress.")
             elif choice == "4":
                 # View favourite workouts - function to be added (Ekta's code)
-                view_favorites(cursor, user_id)  # Ekta's code to be added
+                print("This feature is still working in progress.")  # Ekta's code to be added
             elif choice_workout_menu == "5":
                 # Go back to main  menu
                 continue
