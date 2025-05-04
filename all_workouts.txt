@@ -1,0 +1,22 @@
+Workout Log ID: 2
+Exercise: Squat
+Duration: 12 minutes
+Notes: You're doing great!
+Date: 27 April 2025 at 14:12
+
+No sets recorded for this workout.
+
+Workout Log ID: 1
+Exercise: Deadlift
+Duration: 15 minutes
+Notes: Next time remember to add more weights during the last rep
+Date: 26 April 2025 at 17:07
+
+Exercise Sets:
+ Set 1:
+  Reps: 3
+  Weight: 8.00 Kg
+  Distance: N/A
+  Duration: 45 seconds
+  Rest: 20 seconds
+
