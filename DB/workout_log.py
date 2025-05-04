@@ -1,4 +1,6 @@
 # Elena's code
+from DB.db_utils import WorkoutDiaryDB
+
 '''
 A class to manage logging, viewing and saving workout
 sessions and their associated exercise sets
@@ -8,6 +10,7 @@ class WorkoutLog:
     def __init__(self, cursor, conn):
         self.cursor = cursor
         self.conn = conn
+        self.db_helper = WorkoutDiaryDB()
 
 
     '''
@@ -44,15 +47,9 @@ class WorkoutLog:
             notes = input("Any notes or comments that you would like to add? ")
 
             # Insert workout log into the workout_log table
-            workout_log_query = '''
-            INSERT INTO workout_Log (user_id, exercise_id, duration_minutes, notes)
-            VALUES (%s, %s, %s, %s)
-            '''
-            self.cursor.execute(workout_log_query, (user_id, exercise_id, duration_minutes, notes))
-            self.conn.commit()
-
-            # Get the last inserted workout_log_id
-            workout_log_id = self.cursor.lastrowid
+            workout_log_id = self.db_helper.insert_workout_log(
+                user_id, exercise_id, None, None, duration_minutes, notes
+            )
 
         # Ask if the user wants to log the exercise sets
             add_sets = input("Do you want to add sets for this workout? (y/n): ").lower()
@@ -89,7 +86,7 @@ class WorkoutLog:
             INSERT INTO exercise_sets (workout_log_id, set_number, reps, weight, distance_km, duration_seconds, rest_seconds)
             VALUES (%s, %s, %s, %s, %s, %s, %s)
             '''
-            self .cursor.execute(query_exercise_set, (
+            self.db_helper.insert_exercise_set(
                 workout_log_id,
                 set_number,
                 int(reps) if reps else None,
@@ -97,8 +94,7 @@ class WorkoutLog:
                 float(distance_km) if distance_km else None,
                 int(duration_seconds) if duration_seconds else None,
                 int(rest_seconds) if rest_seconds else None
-            ))
-            self.conn.commit()
+            )
 
             # Prompt for next set
             set_number += 1

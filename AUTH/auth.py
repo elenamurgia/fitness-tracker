@@ -25,9 +25,6 @@ class UserAuth:
     def register(self):
         """Handles user registration."""
         username = input("Choose a username: ").strip()
-
-        print("Debug:Entered user_name()") #Paula debug line
-
         password = getpass.getpass("Choose a password: ").strip()
 
         try:

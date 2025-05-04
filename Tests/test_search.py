@@ -1,8 +1,7 @@
-import pytest
-import requests
 from unittest.mock import patch, Mock
 from CLI.client_side import ExerciseSearchDB
 from CLI.client_side import ExerciseSearchAPI
+
 
 #Test: user enters normal string: should return lowercase, stripped string
 @patch('builtins.input', return_value= '  Chest  ')
@@ -56,7 +55,18 @@ def test_get_exercises_muscle_db(mock_get):
     assert result == mock_response_data
     mock_get.assert_called_with("http://testserver/user_exercises", params={'muscle': 'chest'})
 
+#Test that function get_exercises_muscle_db handles errors
+@patch('requests.get') # mocks requests.get
+def test_get_exercises_muscle_db_incorrect_response(mock_get):
+    mock_response = Mock()
+    mock_response.status_code = 404
+    mock_response.json.return_value = {} #simulates an empty response (no exercises found)
 
+    mock_get.return_value = mock_response
 
+    search = ExerciseSearchDB("http://testserver")
 
+    result = search.get_exercises_muscle_db("chest")
 
+    assert result == {} #It should return an empty dictionary
+    mock_get.assert_called_with("http://testserver/user_exercises", params={'muscle': 'chest'})
