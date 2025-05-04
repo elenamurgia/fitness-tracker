@@ -30,6 +30,7 @@ CREATE TABLE workout_log (
     end_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     duration_minutes INTEGER,
     notes TEXT,
+    favourites BOOLEAN DEFAULT FALSE,
 
     -- Foreign keys
     FOREIGN KEY (user_id) REFERENCES users(user_id),
