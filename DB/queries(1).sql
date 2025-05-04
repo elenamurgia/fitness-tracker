@@ -64,7 +64,17 @@ VALUES
 ('Squat', 'strength', 'legs', 'beginner', 'none', 'Stand with feet shoulder-width apart. Bend your knees and lower your body.'),
 ('Bicep Curl', 'strength', 'arms', 'intermediate', 'dumbbells', 'Curl the dumbbells up while keeping your elbows close to your sides.'),
 ('Plank', 'isometric', 'core', 'intermediate', 'none', 'Hold your body in a straight line, supported on your forearms and toes.'),
-('Deadlift', 'strength', 'back', 'advanced', 'barbell', 'Lift the barbell from the floor while keeping your back straight.');
+('Deadlift', 'strength', 'back', 'advanced', 'barbell', 'Lift the barbell from the floor while keeping your back straight.'),
+('Lunges', 'strength', 'legs', 'beginner', 'none', 'Step forward with one leg and lower your hips until both knees are bent at about 90 degrees.'),
+('Tricep Dip', 'strength', 'arms', 'beginner', 'bench', 'Use a bench or chair to dip your body down and push back up using your triceps.'),
+('Mountain Climbers', 'cardio', 'core', 'intermediate', 'none', 'In a plank position, alternate bringing your knees to your chest as fast as you can.'),
+('Russian Twist', 'strength', 'core', 'intermediate', 'medicine ball', 'Sit with knees bent, lean back slightly, and twist your torso side to side.'),
+('Burpees', 'cardio', 'full body', 'advanced', 'none', 'Squat, jump to a plank, do a push-up, jump forward and leap up.'),
+('Bench Press', 'strength', 'chest', 'intermediate', 'barbell', 'Lie on a bench and press the barbell up from your chest.'),
+('Leg Press', 'strength', 'legs', 'intermediate', 'machine', 'Push the weight platform away with your legs while seated in the machine.'),
+('Lat Pulldown', 'strength', 'back', 'intermediate', 'machine', 'Pull the bar down to your chest, keeping your back straight and elbows down.'),
+('Side Plank', 'isometric', 'core', 'intermediate', 'none', 'Lie on one side and lift your body using one forearm, keeping your body straight.'),
+('Jump Rope', 'cardio', 'full body', 'beginner', 'jump rope', 'Jump continuously while rotating the rope with your wrists.');
 
 -- Mock data for Elena's tests
 INSERT INTO workout_log (user_id, exercise_id, duration_minutes, notes)
