@@ -37,10 +37,11 @@ For Windows/PyCharm users: use the terminal and write python app.py to run the s
 If the login is successful, a message will be displayed to confirm that the user is logged in, and the Main Menu will appear.
 
 1. If the user chooses 1, they could choose between view past workouts or log new workouts:
-![A screenshot](https://raw.githubusercontent.com/elenamurgia/fitness-tracker/main/Images/Screenshot_login_terminal.png "Screenshot workout terminal")
+![A screenshot](https://raw.githubusercontent.com/elenamurgia/fitness-tracker/main/Images/Screenshot_workout_terminal.png "Screenshot workout terminal")
 
 2. If the user chooses 2, they could choose between getting a new exercise suggestion or one of the stored exercises:
 Option a (new suggestion from the Ninjas API exercises).
+![A screenshot](https://raw.githubusercontent.com/elenamurgia/fitness-tracker/main/Images/Screenshot_api_exercise.png "Screenshot api exercise")
 
 Option b (exercises related to the muscle from the stored exercises).
 ![A screenshot](https://raw.githubusercontent.com/elenamurgia/fitness-tracker/main/Images/Screenshot_exercise_suggestion_menu.png "Screenshot exercise suggestion terminal")
